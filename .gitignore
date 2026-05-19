@@ -1,0 +1,32 @@
+# Environments
+.venv/
+env/
+venv/
+ENV/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+
+# Config & Secrets
+.env
+.env.*
+config.yaml.local
+
+# Run/Log data
+logs/*.log
+output/**/*
+processed/**/*
+state/**/*
+
+# Ignore specific local inputs/outputs but keep folders via gitkeep
+input/**/*
+!input/.gitkeep
+logs/**/*
+!logs/.gitkeep
+output/**/*
+!output/.gitkeep
+processed/**/*
+!processed/.gitkeep
+state/**/*
+!state/.gitkeep

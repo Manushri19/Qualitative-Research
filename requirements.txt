@@ -1,0 +1,29 @@
+# Core
+pyyaml
+python-dotenv
+pydantic
+
+# LLM
+ollama
+
+# Report assembly
+markdown
+weasyprint
+matplotlib
+jinja2
+Pillow
+
+# Utilities
+loguru
+rich
+tqdm
+
+# Document extraction
+llama-parse
+unstructured[pdf]
+pymupdf
+
+# Financial table handling  
+pandas
+tabulate
+requests

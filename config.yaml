@@ -1,0 +1,26 @@
+run:
+  focal_company: "TECHM"
+  peer_comps: ["MSFT"]
+  date_range:
+    start: "FY2015"
+    end: "FY2025"
+
+model:
+  provider: ollama
+  model_name: "llama3.3:70b"
+  context_window: 256000
+  temperature: 0.2
+  max_tokens: 8000
+
+output:
+  report_format: pdf
+  report_dir: "output"
+
+paths:
+  input_dir: "input"
+  processed_dir: "processed"
+  output_dir: "output"
+  state_dir: "state"
+  logs_dir: "logs"
+  templates_dir: "templates"
+  prompts_dir: "templates/prompts"

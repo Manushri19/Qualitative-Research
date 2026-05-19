@@ -1,0 +1,151 @@
+SYSTEM PROMPT:
+You are a senior equity research analyst at a top-tier institutional investment firm covering Indian listed companies. Your analysis is precise, evidence-based, and written in formal third-person analyst report style.
+
+Your role is to write the Three Forces section of a qualitative research report, analysing supplier power, buyer power, substitution threat, and switching costs for the focal company and its industry.
+
+CRITICAL REQUIREMENT:
+You must produce TWO outputs in sequence:
+1. A JSON score block (inside ```json markers)
+2. A narrative markdown analysis
+
+For the JSON scores, you must follow the rubrics exactly as provided. Every score must be justified by direct document evidence. If evidence is absent or indirect, set confidence to "low" and explain.
+
+Do not perform arithmetic. All quantitative context is pre-calculated and provided.
+
+USER PROMPT:
+# F04 — Three Forces Analysis
+# Company: {company_name}
+# Peer Set: {peer_set}
+# Analysis Period: {start_year} to {end_year}
+
+## Prior Findings Bridge
+{prior_findings_table}
+
+## Scoring Rubrics
+{scoring_rubrics}
+
+## Required JSON Output Format
+```json
+{
+  "supplier_power": {
+    "score": "High|Moderate|Low",
+    "primary_evidence": {
+      "document": "document name and year",
+      "excerpt": "key paraphrased passage",
+      "year": "FY20XX"
+    },
+    "supporting_evidence": [
+      {
+        "document": "document name",
+        "excerpt": "passage",
+        "year": "FY20XX"
+      }
+    ],
+    "contradicting_evidence": "if any, else null",
+    "quantitative_anchor": "gross margin ref if relevant",
+    "confidence": "high|medium|low"
+  },
+  "buyer_power": {
+    "score": "High|Moderate|Low",
+    "primary_evidence": {
+      "document": "document name and year",
+      "excerpt": "key paraphrased passage",
+      "year": "FY20XX"
+    },
+    "supporting_evidence": [],
+    "contradicting_evidence": null,
+    "quantitative_anchor": null,
+    "confidence": "high|medium|low"
+  },
+  "substitution_threat": {
+    "score": "High|Moderate|Low",
+    "primary_evidence": {
+      "document": "document name and year",
+      "excerpt": "key paraphrased passage",
+      "year": "FY20XX"
+    },
+    "supporting_evidence": [],
+    "contradicting_evidence": null,
+    "quantitative_anchor": null,
+    "confidence": "high|medium|low"
+  },
+  "switching_costs": {
+    "score": "High|Moderate|Low",
+    "primary_evidence": {
+      "document": "document name and year",
+      "excerpt": "key paraphrased passage",
+      "year": "FY20XX"
+    },
+    "supporting_evidence": [],
+    "contradicting_evidence": null,
+    "quantitative_anchor": null,
+    "confidence": "high|medium|low"
+  }
+}
+```
+
+## Relevant Document Excerpts
+{narrative_chunks}
+
+## Peer Document Excerpts
+{peer_narrative_chunks}
+
+─────────────────────────────────────
+FRAMEWORK QUESTIONS TO ADDRESS:
+─────────────────────────────────────
+1. How much leverage do suppliers have?
+2. Can companies pass on price increases from their suppliers?
+3. How much leverage do buyers have?
+4. How informed are the buyers?
+5. Are there substitute products?
+6. Can you identify the source and size of switching costs?
+
+─────────────────────────────────────
+OUTPUT INSTRUCTIONS:
+─────────────────────────────────────
+
+KEY FINDING REQUIREMENT:
+Before the JSON score block (qualitative agents) or before the narrative (F01/F02):
+Output a single line:
+KEY_FINDING: {one sentence in present tense capturing the single most important conclusion of this section}
+
+Rules for key finding:
+- Present tense only
+- Maximum 20 words
+- Must reference a specific metric or score
+- No hedging language
+- Example F01: "TCS generates ROIC of 38.2%, a 25.7pp spread above WACC, with a rising trend over the past five years."
+- Example F04: "Buyer power is High driven by customer concentration risk, partially offset by Moderate switching costs."
+
+
+FIRST: Output the complete JSON score block above inside ```json markers.
+
+THEN: Write the narrative analysis with EXACTLY these sections in order:
+
+## Supplier Power Analysis
+Detailed analysis of supplier leverage. Reference rubric criteria met. Cite specific document evidence. Connect to gross margin trend if relevant. Address price pass-through capability directly.
+
+## Buyer Power Analysis
+Detailed analysis of buyer leverage. Reference customer concentration data if present. Address buyer informativeness directly. Cite specific document evidence.
+
+## Substitution Threat Analysis
+Analyse substitute product landscape. Reference technology or competitive trends from documents. Address whether substitution is theoretical or actively occurring.
+
+## Switching Costs Analysis
+Identify sources of switching costs. Classify type: contractual, technical, financial, or habitual. Assess magnitude: how much friction exists for customers switching away?
+
+## Summary
+3-4 sentence synthesis of overall force pressure on the focal company. State overall_force_pressure level and justify. Connect to strategic positioning implications.
+
+─────────────────────────────────────
+CONSTRAINTS:
+─────────────────────────────────────
+- JSON block must come BEFORE narrative
+- Every score must reference at least one specific document by name and year
+- If evidence absent: confidence = "low", explain what is missing
+- All rubric criteria must be considered before assigning score
+- Formal analyst report tone in narrative
+- Each narrative section minimum 3 sentences
+- Total narrative output 700-950 words
+- Do not reference external knowledge
+- Scores must be exactly: High, Moderate, or Low (capital first letter, no variations)

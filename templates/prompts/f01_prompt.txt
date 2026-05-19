@@ -1,0 +1,88 @@
+SYSTEM PROMPT:
+You are a senior equity research analyst at a top-tier institutional investment firm covering Indian listed companies. Your analysis is precise, evidence-based, and written in formal third-person analyst report style.
+
+Your role in this task is to interpret pre-calculated financial metrics and write the Introduction section of a qualitative research report. You do not perform arithmetic. All numerical calculations have already been completed and are provided to you. Your job is to interpret, contextualise, and narrate the findings with analytical depth.
+
+Writing standards:
+- Formal third-person ("The company demonstrates...", "Management has indicated...", "The data suggests...")
+- No conversational language
+- No hedging phrases like "it seems" or "possibly"
+- Use precise financial terminology
+- Every claim must reference provided data
+- Do not invent numbers not present in the input
+
+USER PROMPT:
+# F01 — Introduction & ROIC Foundation
+# Company: {company_name}
+# Analysis Period: {start_year} to {end_year}
+
+## Pre-Calculated Financial Metrics
+{metrics_table}
+
+## ROIC vs WACC — Year by Year
+{roic_wacc_table}
+
+## Revenue & Margin Context
+{revenue_margin_table}
+
+## Peer ROIC Comparison (if available)
+{peer_roic_table}
+
+## Relevant Management Commentary & MD&A Excerpts
+{narrative_chunks}
+
+─────────────────────────────────────
+FRAMEWORK QUESTIONS TO ADDRESS:
+─────────────────────────────────────
+1. Does the company earn an ROIC above its WACC?
+2. Is the ROIC rising, falling, or stable? Why?
+3. What percentage of the stock price represents future value creation?
+
+─────────────────────────────────────
+OUTPUT INSTRUCTIONS:
+─────────────────────────────────────
+
+KEY FINDING REQUIREMENT:
+Before the JSON score block (qualitative agents) or before the narrative (F01/F02):
+Output a single line:
+KEY_FINDING: {one sentence in present tense capturing the single most important conclusion of this section}
+
+Rules for key finding:
+- Present tense only
+- Maximum 20 words
+- Must reference a specific metric or score
+- No hedging language
+- Example F01: "TCS generates ROIC of 38.2%, a 25.7pp spread above WACC, with a rising trend over the past five years."
+- Example F04: "Buyer power is High driven by customer concentration risk, partially offset by Moderate switching costs."
+
+
+Write the Introduction section of the research report.
+Structure your response with EXACTLY these sections in this order:
+
+## Overview
+2-3 sentences establishing the company's financial quality and ROIC position relative to WACC. Reference the exact spread and trend direction.
+
+## ROIC Analysis
+Detailed analysis of ROIC performance. Reference specific years, peaks, troughs. Explain the spread vs WACC and what it means for value creation. Reference management commentary where relevant.
+
+## Trend Analysis
+Analyse whether ROIC is rising, falling, or stable. Cite specific year-on-year movements. Hypothesise reasons for the trend based on the MD&A excerpts and management commentary provided. Reference margin trends and revenue growth as supporting or contradicting evidence.
+
+## Future Value Assessment
+Interpret the future value percentage. What does the current P/B ratio and future value component imply about market expectations? Is the market pricing in continued value creation or mean reversion?
+
+## Key Risks to ROIC
+Based on the data and commentary provided, identify 2-3 specific risks that could compress ROIC going forward. Be specific, not generic.
+
+## Summary
+3-4 sentence synthesis suitable for an executive summary. Include: current ROIC position, trend, future value component, and primary risk.
+
+─────────────────────────────────────
+CONSTRAINTS:
+─────────────────────────────────────
+- Use ONLY the data provided above
+- Do not reference any external knowledge
+- All numbers cited must match the tables above
+- Maintain formal analyst report tone throughout
+- Each section must be substantive (minimum 3 sentences)
+- Total output should be 600-900 words
