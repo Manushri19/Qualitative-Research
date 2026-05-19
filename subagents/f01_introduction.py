@@ -293,7 +293,7 @@ P/B Ratio       | {fv.get('pb_ratio', 0.0)}x     | -"""
                 
             result = self.parse_llm_output(llm_response, calculations)
             
-            # TODO: save_output(result) if defined in BaseAgent
+            self.save_output(result)
             
             return result
         except Exception as e:
