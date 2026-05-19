@@ -4,18 +4,8 @@ from typing import Dict, Any
 from loguru import logger
 
 from tools.financial_calculator import FinancialCalculator
-
-class BaseAgent:
-    """Mock BaseAgent to allow standalone compilation if needed."""
-    def __init__(self, agent_id, config, llm_client):
-        self.agent_id = agent_id
-        self.config = config
-        self.llm_client = llm_client
-
-class BaseLLMClient:
-    """Mock BaseLLMClient for typing."""
-    def complete(self, system: str, user: str) -> str:
-        pass
+from subagents.base_agent import BaseAgent
+from llm.client import BaseLLMClient
 
 class F01IntroductionAgent(BaseAgent):
     """
