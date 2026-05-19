@@ -6,7 +6,12 @@ from loguru import logger
 from datetime import datetime
 import markdown
 from jinja2 import Template
-from weasyprint import HTML, CSS
+try:
+    from weasyprint import HTML, CSS
+    WEASYPRINT_AVAILABLE = True
+except Exception as e:
+    logger.warning(f"WeasyPrint is not fully available on this system due to missing GTK+ dependencies ({e}). Falling back to HTML report compilation.")
+    WEASYPRINT_AVAILABLE = False
 
 from tools.chart_generator import ChartGenerator
 from tools.executive_summary_generator import ExecutiveSummaryGenerator
@@ -706,18 +711,32 @@ class ReportAssembler:
 
     def convert_to_pdf(self, html_content: str) -> Path:
         """
-        Converts HTML to PDF using WeasyPrint.
+        Converts HTML to PDF using WeasyPrint. Falls back to saving HTML report.
         """
         ticker = self.session.get("ticker", "TICKER")
-        out_path = self.output_dir / f"{ticker}_qualitative_research_{self.date_str}.pdf"
+        html_path = self.output_dir / f"{ticker}_qualitative_research_{self.date_str}.html"
         
+        # Always write the HTML report first for reference
         try:
-            HTML(string=html_content).write_pdf(str(out_path))
-            logger.info(f"Report generated: {out_path}")
-            return out_path
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(html_content)
+            logger.info(f"HTML reference report generated: {html_path}")
+        except Exception as e:
+            logger.error(f"Failed to write HTML reference report: {e}")
+            
+        if not WEASYPRINT_AVAILABLE:
+            logger.warning("Skipping PDF generation because WeasyPrint is not fully available. Returning HTML path.")
+            return html_path
+            
+        pdf_path = self.output_dir / f"{ticker}_qualitative_research_{self.date_str}.pdf"
+        try:
+            HTML(string=html_content).write_pdf(str(pdf_path))
+            logger.info(f"PDF report generated: {pdf_path}")
+            return pdf_path
         except Exception as e:
             logger.critical(f"PDF generation failed: {e}\n{traceback.format_exc()}")
-            raise RuntimeError(f"PDF generation failed: {e}")
+            logger.warning("Falling back to HTML report path.")
+            return html_path
 
     def assemble(self, broker: Any, llm_client: Any, session: dict) -> Path:
         """
