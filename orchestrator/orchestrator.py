@@ -53,10 +53,10 @@ class Orchestrator:
         """
         console = Console()
         
-        # PHASE 0: Pre-Processor
-        preprocessor = PreProcessor(self.config)
-        preprocessor.run()
-        logger.info("Phase 0 complete — context packages ready")
+        # PHASE 0: Pre-Processor (Already done, skipping for direct qualitative/synthesis run)
+        # preprocessor = PreProcessor(self.config)
+        # preprocessor.run()
+        # logger.info("Phase 0 complete — context packages ready")
         
         # PHASE A: Parallel — F01, F02, F03
         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
