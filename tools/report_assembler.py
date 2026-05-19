@@ -502,7 +502,7 @@ class ReportAssembler:
         self.focal_company = focal_company
         self.session = session
         
-        self.processed_dir = Path(config.get("processed_dir", "./output/processed"))
+        self.processed_dir = Path(config.get("paths", {}).get("processed_dir", "processed"))
         self.date_str = datetime.now().strftime("%Y%m%d")
         
         base_out = Path(config.get("output_dir", "./output"))
