@@ -6,12 +6,32 @@ from loguru import logger
 from datetime import datetime
 import markdown
 from jinja2 import Template
+import sys
+import os
+
 try:
+    # Save original stdout/stderr to prevent weasyprint dependency warning clutter
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
+    sys.stdout = open(os.devnull, 'w')
+    sys.stderr = open(os.devnull, 'w')
+    
     from weasyprint import HTML, CSS
     WEASYPRINT_AVAILABLE = True
 except Exception as e:
-    logger.warning(f"WeasyPrint is not fully available on this system due to missing GTK+ dependencies ({e}). Falling back to HTML report compilation.")
     WEASYPRINT_AVAILABLE = False
+finally:
+    # Restore stdout/stderr
+    try:
+        sys.stdout.close()
+        sys.stderr.close()
+    except Exception:
+        pass
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+
+if not WEASYPRINT_AVAILABLE:
+    logger.warning("WeasyPrint is not fully available on this system due to missing GTK+ dependencies. Falling back to HTML report compilation.")
 
 from tools.chart_generator import ChartGenerator
 from tools.executive_summary_generator import ExecutiveSummaryGenerator
