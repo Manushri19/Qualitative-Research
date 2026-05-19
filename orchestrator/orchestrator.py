@@ -27,7 +27,7 @@ class Orchestrator:
         self.context_broker = ContextBroker(self.focal_company, processed_dir)
 
     def _load_context_package(self, agent_id: str) -> dict:
-        path = Path(self.config.get("paths", {}).get("processed_dir", "processed")) / self.focal_company / "context_packages" / f"{agent_id}.json"
+        path = Path(self.config.get("paths", {}).get("processed_dir", "processed")) / self.focal_company / "context_packages" / f"{agent_id}_context.json"
         if path.exists():
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
