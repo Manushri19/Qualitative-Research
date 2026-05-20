@@ -1,33 +1,10 @@
-# Environments
-.venv/
-env/
-venv/
-ENV/
-.pytest_cache/
+# Python-generated files
 __pycache__/
-*.pyc
-*.pyo
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
 
-# Config & Secrets
-.env
-.env.*
-!.env.example
-config.yaml.local
-
-# Run/Log data
-logs/*.log
-output/**/*
-processed/**/*
-state/**/*
-
-# Ignore specific local inputs/outputs but keep folders via gitkeep
-input/**/*
-!input/.gitkeep
-logs/**/*
-!logs/.gitkeep
-output/**/*
-!output/.gitkeep
-processed/**/*
-!processed/.gitkeep
-state/**/*
-!state/.gitkeep
+# Virtual environments
+.venv

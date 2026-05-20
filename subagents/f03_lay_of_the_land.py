@@ -374,6 +374,7 @@ Rule Matched:        {struc.get('rule_matched', '-')}"""
             "industry_structure": struc.get("structure_classification", "Moderately Competitive"),
             "strategic_opportunities": struc.get("strategic_opportunities", "Niche dominance and operational efficiency"),
             "rule_matched": struc.get("rule_matched", 5),
+            "proxy_market_share": calculations.get("proxy_market_share", {}),
             "data_quality_flags": calculations.get("data_quality_flags", [])
         }
         

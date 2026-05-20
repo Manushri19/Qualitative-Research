@@ -324,6 +324,7 @@ Peer set median      | {latest_stats.get('median_roic', 0.0)}%| calculated"""
             "markup_trend": gm_trend.get("markup_trend", "stable"),
             "industry_attractiveness": calculations.get("industry_attractiveness", "medium"),
             "strategy_matters_strength": calculations.get("strategy_matters_strength", "moderate"),
+            "peer_roic_series": calculations.get("peer_roic_series", {}),
             "f01_roic_referenced": bool(f01_findings),
             "data_quality_flags": calculations.get("data_quality_flags", [])
         }

@@ -85,7 +85,8 @@ class ChartGenerator:
         """
         all_years = set()
         for company, data in peer_roic_series.items():
-            all_years.update(data.keys())
+            if isinstance(data, dict):
+                all_years.update(data.keys())
         years = sorted(list(all_years))[-5:] # last 5 years
         
         if not years:
@@ -109,7 +110,10 @@ class ChartGenerator:
             
             values = []
             for y in years:
-                values.append(peer_roic_series.get(company, {}).get(y, 0))
+                val = peer_roic_series.get(company, {}).get(y, 0)
+                if isinstance(val, dict):
+                    val = val.get("roic", 0)
+                values.append(val if val is not None else 0.0)
                 
             offset = (i - len(companies)/2 + 0.5) * width
             bars = ax.bar(x + offset, values, width, label=company, color=color)
@@ -141,13 +145,13 @@ class ChartGenerator:
         """
         Generates proxy market share over time chart (F03).
         """
-        years = sorted(list(proxy_market_share.keys()))
+        years = sorted([k for k in proxy_market_share.keys() if str(k).startswith("FY")])
         if not years:
             return None
             
         companies = set()
         for y in years:
-            companies.update(proxy_market_share[y].keys())
+            companies.update(proxy_market_share[y].get("companies_included", []))
             
         companies = list(companies)
         if focal_ticker in companies:
@@ -157,7 +161,9 @@ class ChartGenerator:
         data = {c: [] for c in companies}
         for y in years:
             for c in companies:
-                data[c].append(proxy_market_share[y].get(c, {}).get("market_share_pct", 0.0))
+                val_data = proxy_market_share[y].get(c, {})
+                val = val_data.get("market_share_pct", 0.0) if isinstance(val_data, dict) else 0.0
+                data[c].append(val)
                 
         fig, ax = plt.subplots(figsize=self.FIGURE_SIZE_WIDE, dpi=self.FIGURE_DPI)
         

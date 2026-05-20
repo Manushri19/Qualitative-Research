@@ -251,6 +251,7 @@ P/B Ratio       | {fv.get('pb_ratio', 0.0)}x     | -"""
             "margin_trend": margins.get("margin_trend", "stable"),
             "value_creating": spread > 0,
             "years_analysed": trend.get("years_analysed", 0),
+            "roic_vs_wacc_by_year": trend.get("roic_vs_wacc_by_year", {}),
             "data_quality_flags": calculations.get("data_quality_flags", [])
         }
         

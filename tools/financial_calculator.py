@@ -122,8 +122,25 @@ class FinancialCalculator:
             
         keys_lower = [k.lower().strip() for k in keys]
         
+        # Check if there are non-USD tables in the document.
+        # If there are both USD and non-USD tables, we prefer non-USD tables for focal INR firms.
+        has_non_usd_tables = False
+        for table in tables:
+            headers_str = " ".join([str(h) for h in table.get("headers", [])]).lower()
+            table_name = str(table.get("table_name", "")).lower()
+            if "usd" not in headers_str and "usd" not in table_name:
+                has_non_usd_tables = True
+                break
+
         for exact in [True, False]:
             for table in tables:
+                # Currency filter: if we have non-USD tables, skip any table that contains USD in header/name
+                if has_non_usd_tables:
+                    headers_str = " ".join([str(h) for h in table.get("headers", [])]).lower()
+                    table_name = str(table.get("table_name", "")).lower()
+                    if "usd" in headers_str or "usd" in table_name:
+                        continue
+
                 for row in table.get("rows", []):
                     label = str(row.get("label", "")).lower().strip()
                     match = False
@@ -171,6 +188,59 @@ class FinancialCalculator:
                 total_assets = FinancialCalculator._extract_value(year_data, metric_map.get("total_assets", []))
                 current_liabilities = FinancialCalculator._extract_value(year_data, metric_map.get("current_liabilities", []))
                 
+                # FALLBACK A: Tax rate fallback from total tax expense and profit before tax
+                if tax_rate is None:
+                    tax_exp_keys = ["total tax expense", "tax expense", "tax expense - current tax + deferred tax", "current tax + deferred tax"]
+                    pbt_keys = ["profit before tax", "pbt", "profit before exceptional item and tax", "profit before tax and exceptional item"]
+                    
+                    total_tax_expense = FinancialCalculator._extract_value(year_data, tax_exp_keys)
+                    profit_before_tax = FinancialCalculator._extract_value(year_data, pbt_keys)
+                    if total_tax_expense is not None and profit_before_tax is not None and profit_before_tax != 0:
+                        tax_rate = total_tax_expense / profit_before_tax
+                        logger.info(f"Dynamically calculated tax rate for {fy}: {tax_rate}")
+                        
+                # Ensure tax rate is ratio, not percentage
+                if tax_rate is not None and tax_rate > 1.0:
+                    tax_rate = tax_rate / 100.0
+                    
+                # FALLBACK B: Total debt fallback by summing borrowings and lease liabilities
+                if total_debt is None:
+                    summed_debt = 0.0
+                    tables = year_data.get("tables", [])
+                    has_non_usd_tables = False
+                    for table in tables:
+                        headers_str = " ".join([str(h) for h in table.get("headers", [])]).lower()
+                        table_name = str(table.get("table_name", "")).lower()
+                        if "usd" not in headers_str and "usd" not in table_name:
+                            has_non_usd_tables = True
+                            break
+                            
+                    found_items = []
+                    for table in tables:
+                        if has_non_usd_tables:
+                            headers_str = " ".join([str(h) for h in table.get("headers", [])]).lower()
+                            table_name = str(table.get("table_name", "")).lower()
+                            if "usd" in headers_str or "usd" in table_name:
+                                continue
+                        for row in table.get("rows", []):
+                            label = str(row.get("label", "")).lower().strip()
+                            if "borrowings" in label or "lease liabilities" in label:
+                                for val in row.get("values", []):
+                                    try:
+                                        cleaned = str(val).replace(",", "").replace("$", "").replace("₹", "").strip()
+                                        if cleaned.startswith("(") and cleaned.endswith(")"):
+                                            cleaned = "-" + cleaned[1:-1]
+                                        f_val = float(cleaned)
+                                        if f_val > 0:
+                                            found_items.append((row.get("label"), f_val))
+                                            summed_debt += f_val
+                                            break # only take first float in row
+                                    except ValueError:
+                                        continue
+                    if summed_debt > 0:
+                        total_debt = summed_debt
+                        logger.info(f"Summed total debt for {fy} from borrowings/lease liabilities: {total_debt} ({found_items})")
+
                 missing = []
                 for name, val in [("ebit", ebit), ("tax_rate", tax_rate), ("total_equity", total_equity), 
                                   ("total_debt", total_debt), ("cash_equivalents", cash_equivalents), 
