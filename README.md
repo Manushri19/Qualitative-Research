@@ -1,4 +1,4 @@
-# 📊 Hedge Fund Qualitative Research Agent Pipeline
+# 📊 Qualitative Research Agent Pipeline
 
 An institutional-grade, multi-agent AI pipeline designed to conduct deep qualitative equity research and competitive analysis on listed companies (focused on the Indian market but extensible globally). 
 
